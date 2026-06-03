@@ -213,6 +213,11 @@ input[type="file"].hidden-file { display: none; }
           <label for="fHero">Featured experience (hero)</label>
           <label class="toggle"><input type="checkbox" id="fHero"><span class="toggle-slider"></span></label>
         </div>
+        <div class="hero-toggle-row" style="background:rgba(201,162,53,0.06);border-color:rgba(201,162,53,0.2)">
+          <div class="hero-icon" style="color:var(--accent)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+          <label for="fOwned">Owned (appears in "Experiences you have")</label>
+          <label class="toggle"><input type="checkbox" id="fOwned"><span class="toggle-slider"></span></label>
+        </div>
         <div class="form-group">
           <label class="form-label">Title *</label>
           <input class="form-input" id="fTitle" type="text" placeholder="PLAYERS MEET & GREET" required>
@@ -239,6 +244,12 @@ input[type="file"].hidden-file { display: none; }
           <div class="form-group">
             <label class="form-label">Available pax *</label>
             <input class="form-input" id="fPax" type="number" placeholder="20" min="1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Price</label>
+            <input class="form-input" id="fPrice" type="text" placeholder="€ 350">
           </div>
         </div>
         <div class="form-section-title">Images</div>
@@ -377,7 +388,9 @@ function openDrawer(id = null) {
   document.getElementById('fDuracion').value = ev?.duracion || '';
   document.getElementById('fPax').value      = ev?.pax ?? 20;
   document.getElementById('fHero').checked   = ev?.is_hero || false;
+  document.getElementById('fOwned').checked  = ev?.owned || false;
   document.getElementById('fActive').checked = ev?.active ?? true;
+  document.getElementById('fPrice').value    = ev?.price || '';
   document.getElementById('fHeroImg').value  = ev?.hero_img || '';
   document.getElementById('fCardImg').value  = ev?.card_img || '';
   ['fHeroImg:prevHero','fCardImg:prevCard'].forEach(p => {
@@ -402,6 +415,7 @@ async function saveExp() {
     lugar: document.getElementById('fLugar').value.trim(), hora: document.getElementById('fHora').value.trim(),
     duracion: document.getElementById('fDuracion').value.trim(), pax: parseInt(document.getElementById('fPax').value) || 20,
     is_hero: document.getElementById('fHero').checked, active: document.getElementById('fActive').checked,
+    owned: document.getElementById('fOwned').checked, price: document.getElementById('fPrice').value.trim(),
     hero_img: document.getElementById('fHeroImg').value.trim(), card_img: document.getElementById('fCardImg').value.trim(),
   };
   const btn = document.getElementById('btnSave');
