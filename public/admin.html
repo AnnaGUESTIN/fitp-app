@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FITP Admin — Experiences</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --sidebar-w: 220px; --sidebar-bg: #0f2a5e; --body-bg: #081629; --surface: #0f2040;
+  --surface2: #152a50; --border: rgba(255,255,255,0.08); --accent: #c9a235;
+  --accent-hover: #b08929; --text: #fff; --text-dim: rgba(255,255,255,0.5);
+  --text-mid: rgba(255,255,255,0.78); --danger: #dc2626; --gold: #c8a820;
+}
+html, body { height: 100%; font-family: 'Montserrat', sans-serif; background: var(--body-bg); color: var(--text); }
+.app { display: flex; height: 100vh; overflow: hidden; }
+
+/* SIDEBAR */
+.sidebar { width: var(--sidebar-w); background: var(--sidebar-bg); display: flex; flex-direction: column; padding: 24px 16px; flex-shrink: 0; border-right: 1px solid rgba(255,255,255,0.06); }
+.sidebar-logo { width: 110px; margin-bottom: 28px; flex-shrink: 0; }
+.sidebar-logo svg { width: 100%; display: block; }
+.nav { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; border: 1.5px solid transparent; cursor: pointer; color: var(--text-dim); font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; transition: all .18s; user-select: none; }
+.nav-item svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.nav-item:hover { color: #fff; background: rgba(255,255,255,0.07); }
+.nav-item.active { color: #fff; border-color: rgba(255,255,255,0.32); }
+.nav-section { font-size: 10px; letter-spacing: 0.14em; color: var(--text-dim); text-transform: uppercase; padding: 16px 12px 6px; }
+.sidebar-footer { margin-top: auto; }
+.brand-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: 0.04em; }
+.brand-tag { font-size: 10px; color: var(--text-dim); letter-spacing: 0.12em; margin-top: 1px; }
+
+/* MAIN */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { display: flex; align-items: center; gap: 12px; padding: 18px 32px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.topbar-title { font-size: 13px; font-weight: 600; color: var(--text-dim); letter-spacing: 0.06em; text-transform: uppercase; }
+.topbar-sep { color: var(--text-dim); }
+.topbar-page { font-size: 13px; font-weight: 700; }
+.spacer { flex: 1; }
+.view-btn { display: flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: var(--text-mid); font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: all .18s; }
+.view-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.35); color: #fff; }
+.view-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.content { flex: 1; overflow-y: auto; padding: 28px 32px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; }
+.content::-webkit-scrollbar { width: 5px; }
+.content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+.page-header { display: flex; align-items: center; margin-bottom: 24px; }
+.page-header h1 { font-size: 22px; font-weight: 700; }
+.count-badge { margin-left: 10px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+.btn-new { margin-left: auto; display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 9px; background: var(--accent); border: none; color: #fff; font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; transition: background .18s; }
+.btn-new:hover { background: var(--accent-hover); }
+.btn-new svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* LIST */
+.exp-list { display: flex; flex-direction: column; gap: 10px; }
+.exp-row { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; gap: 16px; padding: 14px 16px; transition: border-color .18s; }
+.exp-row:hover { border-color: rgba(255,255,255,0.16); }
+.exp-thumb { width: 88px; height: 60px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: var(--surface2); position: relative; }
+.exp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-star { position: absolute; top: 4px; left: 4px; background: var(--gold); color: #000; font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 3px; text-transform: uppercase; }
+.exp-info { flex: 1; min-width: 0; }
+.exp-title { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; line-height: 1; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.04em; }
+.exp-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.meta-item { display: flex; align-items: center; gap: 4px; font-size: 11.5px; color: var(--text-dim); }
+.meta-item svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.badge-pax { background: rgba(204,32,39,0.2); border: 1px solid rgba(204,32,39,0.4); color: #ff9999; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 5px; white-space: nowrap; }
+.toggle { position: relative; width: 36px; height: 20px; display: inline-block; flex-shrink: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; inset: 0; background: rgba(255,255,255,0.12); border-radius: 20px; cursor: pointer; transition: background .2s; }
+.toggle-slider::before { content: ''; position: absolute; width: 14px; height: 14px; left: 3px; top: 3px; background: rgba(255,255,255,0.5); border-radius: 50%; transition: transform .2s, background .2s; }
+.toggle input:checked + .toggle-slider { background: var(--accent); }
+.toggle input:checked + .toggle-slider::before { transform: translateX(16px); background: #fff; }
+.exp-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.action-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .15s; }
+.action-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.action-btn:hover { color: #fff; border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.06); }
+.action-btn.star:hover, .action-btn.active-star { color: var(--gold); border-color: var(--gold); background: rgba(200,168,32,0.1); }
+.action-btn.danger:hover { color: #fca5a5; border-color: var(--danger); background: rgba(220,38,38,0.12); }
+
+/* DRAWER */
+.drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 300; opacity: 0; visibility: hidden; transition: opacity .25s, visibility .25s; }
+.drawer-overlay.open { opacity: 1; visibility: visible; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 480px; background: #081629; border-left: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; z-index: 301; transform: translateX(100%); transition: transform .28s cubic-bezier(.4,0,.2,1); }
+.drawer-overlay.open .drawer { transform: translateX(0); }
+.drawer-header { display: flex; align-items: center; padding: 22px 24px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.drawer-title { font-size: 16px; font-weight: 700; }
+.drawer-close { margin-left: auto; width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; font-weight: 700; transition: all .15s; line-height: 1; }
+.drawer-close:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+.drawer-body { flex: 1; overflow-y: auto; padding: 24px; scrollbar-width: thin; }
+.form-grid { display: flex; flex-direction: column; gap: 16px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+.form-input, .form-textarea { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 10px 13px; color: #fff; font-family: 'Montserrat', sans-serif; font-size: 13.5px; width: 100%; transition: border-color .18s; outline: none; }
+.form-input:focus, .form-textarea:focus { border-color: var(--accent); background: rgba(201,162,53,0.08); }
+.form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,0.22); }
+.form-textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+.form-hint { font-size: 10.5px; color: var(--text-dim); margin-top: 2px; }
+.imgs-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.form-section-title { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); padding: 8px 0 4px; border-top: 1px solid var(--border); }
+.hero-toggle-row { display: flex; align-items: center; gap: 12px; background: rgba(200,168,32,0.06); border: 1px solid rgba(200,168,32,0.2); border-radius: 10px; padding: 13px 16px; }
+.hero-toggle-row label { font-size: 13px; font-weight: 600; cursor: pointer; flex: 1; }
+.hero-toggle-row .toggle { width: 42px; height: 23px; }
+.hero-toggle-row .toggle-slider::before { width: 17px; height: 17px; }
+.hero-toggle-row input:checked + .toggle-slider { background: var(--gold); }
+.hero-toggle-row input:checked + .toggle-slider::before { transform: translateX(19px); }
+.hero-icon { color: var(--gold); }
+.hero-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: currentColor; stroke-width: 1.5; }
+.img-preview { height: 52px; background: var(--surface2); border-radius: 6px; margin-top: 4px; background-size: cover; background-position: center; border: 1px solid var(--border); }
+.img-input-row { display: flex; gap: 6px; align-items: center; }
+.img-input-row .form-input { flex: 1; }
+.btn-upload { flex-shrink: 0; padding: 9px 12px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; color: var(--text-mid); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: all .18s; white-space: nowrap; }
+.btn-upload:hover { background: rgba(255,255,255,0.14); color: #fff; }
+input[type="file"].hidden-file { display: none; }
+.drawer-footer { display: flex; align-items: center; gap: 10px; padding: 18px 24px; border-top: 1px solid var(--border); flex-shrink: 0; }
+.btn-save { flex: 1; padding: 12px; background: var(--accent); border: none; border-radius: 9px; color: #fff; font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: background .18s; }
+.btn-save:hover { background: var(--accent-hover); }
+.btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-cancel { padding: 12px 20px; background: transparent; border: 1px solid rgba(255,255,255,0.18); border-radius: 9px; color: var(--text-mid); font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .18s; }
+.btn-cancel:hover { border-color: rgba(255,255,255,0.35); color: #fff; }
+
+/* CONFIRM */
+.confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 400; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
+.confirm-overlay.open { opacity: 1; visibility: visible; }
+.confirm-box { background: #0f2040; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 28px 32px; max-width: 380px; width: 90%; transform: scale(0.94); transition: transform .2s; }
+.confirm-overlay.open .confirm-box { transform: scale(1); }
+.confirm-icon { font-size: 28px; margin-bottom: 12px; }
+.confirm-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.confirm-desc { font-size: 13px; color: var(--text-dim); line-height: 1.55; margin-bottom: 24px; }
+.confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.btn-confirm-cancel { padding: 10px 18px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.18); background: transparent; color: var(--text-mid); font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; }
+.btn-confirm-cancel:hover { border-color: rgba(255,255,255,0.35); color: #fff; }
+.btn-confirm-delete { padding: 10px 18px; border-radius: 8px; border: none; background: var(--danger); color: #fff; font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .15s; }
+.btn-confirm-delete:hover { background: #ef4444; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: #0f2a5e; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 12px 22px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 9px; z-index: 500; white-space: nowrap; transition: transform .3s cubic-bezier(.4,0,.2,1); pointer-events: none; }
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; color: #4ade80; }
+.empty { text-align: center; padding: 64px 24px; color: var(--text-dim); }
+.empty-icon { font-size: 48px; margin-bottom: 16px; opacity: .4; }
+.empty h3 { font-size: 17px; font-weight: 600; color: var(--text-mid); margin-bottom: 8px; }
+.empty p { font-size: 13px; line-height: 1.6; max-width: 300px; margin: 0 auto; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://www.ibiaccommodation.com/static/images/logo-fit.png" alt="FITP" style="width:100%; display:block;">
+    </div>
+    <div class="nav-section">Management</div>
+    <nav>
+      <ul class="nav">
+        <li class="nav-item active">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Experiences
+        </li>
+        <li class="nav-item" style="opacity:.4;cursor:not-allowed">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Events
+        </li>
+        <li class="nav-item" style="opacity:.4;cursor:not-allowed">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Guests
+        </li>
+      </ul>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="brand-name">GUESTIN</div>
+      <div class="brand-tag">Beyond the experience</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <span class="topbar-title">FITP</span>
+      <span class="topbar-sep">/</span>
+      <span class="topbar-page">Experiences</span>
+      <div class="spacer"></div>
+      <a href="/" target="_blank" class="view-btn">
+        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        View website
+      </a>
+    </div>
+    <div class="content">
+      <div class="page-header">
+        <h1>Experiences</h1>
+        <span class="count-badge" id="countBadge">0</span>
+        <button class="btn-new" onclick="openDrawer()">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New experience
+        </button>
+      </div>
+      <div class="exp-list" id="expList"></div>
+    </div>
+  </main>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay">
+  <div class="drawer">
+    <div class="drawer-header">
+      <span class="drawer-title" id="drawerTitle">New experience</span>
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="drawer-body">
+      <form class="form-grid" id="expForm" onsubmit="return false">
+        <input type="hidden" id="fId">
+        <div class="hero-toggle-row">
+          <div class="hero-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+          <label for="fHero">Featured experience (hero)</label>
+          <label class="toggle"><input type="checkbox" id="fHero"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Title *</label>
+          <input class="form-input" id="fTitle" type="text" placeholder="PLAYERS MEET & GREET" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description *</label>
+          <textarea class="form-textarea" id="fDesc" placeholder="Describe the experience..." required></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Venue *</label>
+            <input class="form-input" id="fLugar" type="text" placeholder="Foro Italico, Rome">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Time *</label>
+            <input class="form-input" id="fHora" type="text" placeholder="14:00">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Duration *</label>
+            <input class="form-input" id="fDuracion" type="text" placeholder="2 hours">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Available pax *</label>
+            <input class="form-input" id="fPax" type="number" placeholder="20" min="1">
+          </div>
+        </div>
+        <div class="form-section-title">Images</div>
+        <div class="form-group">
+          <label class="form-label">Hero image (main banner)</label>
+          <div class="img-input-row">
+            <input class="form-input" id="fHeroImg" type="text" placeholder="/images/foto.jpg or https://..." oninput="previewImg('fHeroImg','prevHero')">
+            <button type="button" class="btn-upload" onclick="triggerUpload('fHeroImg','prevHero')">📁 Upload</button>
+            <input type="file" class="hidden-file" id="uHeroImg" accept="image/*" onchange="uploadFile(this,'fHeroImg','prevHero')">
+          </div>
+          <div class="img-preview" id="prevHero" style="display:none"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Card image (carousel &amp; detail)</label>
+          <div class="img-input-row">
+            <input class="form-input" id="fCardImg" type="text" placeholder="/images/foto.jpg or https://..." oninput="previewImg('fCardImg','prevCard')">
+            <button type="button" class="btn-upload" onclick="triggerUpload('fCardImg','prevCard')">📁 Upload</button>
+            <input type="file" class="hidden-file" id="uCardImg" accept="image/*" onchange="uploadFile(this,'fCardImg','prevCard')">
+          </div>
+          <div class="img-preview" id="prevCard" style="display:none"></div>
+          <span class="form-hint">This image appears in the carousel and in the experience detail</span>
+        </div>
+        <div class="form-group" style="flex-direction:row;align-items:center;gap:10px">
+          <label class="toggle"><input type="checkbox" id="fActive" checked><span class="toggle-slider"></span></label>
+          <label class="form-label" for="fActive" style="cursor:pointer">Active (visible on the website)</label>
+        </div>
+      </form>
+    </div>
+    <div class="drawer-footer">
+      <button class="btn-cancel" onclick="closeDrawer()">Cancel</button>
+      <button class="btn-save" id="btnSave" onclick="saveExp()">Save experience</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">🗑️</div>
+    <div class="confirm-title">Delete experience</div>
+    <div class="confirm-desc" id="confirmDesc"></div>
+    <div class="confirm-actions">
+      <button class="btn-confirm-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="btn-confirm-delete" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+let experiences = [], editingId = null, deleteId = null;
+
+const api = {
+  get:    ()         => fetch('/api/experiences').then(r => r.json()),
+  create: (b)        => fetch('/api/experiences',       { method:'POST',   headers:{'Content-Type':'application/json'}, body:JSON.stringify(b) }).then(r => r.json()),
+  update: (id, b)    => fetch(`/api/experiences/${id}`, { method:'PUT',    headers:{'Content-Type':'application/json'}, body:JSON.stringify(b) }).then(r => r.json()),
+  delete: (id)       => fetch(`/api/experiences/${id}`, { method:'DELETE' }).then(r => r.json()),
+  toggle: (id)       => fetch(`/api/experiences/${id}/toggle`, { method:'PATCH' }).then(r => r.json()),
+  hero:   (id)       => fetch(`/api/experiences/${id}/hero`,   { method:'PATCH' }).then(r => r.json()),
+};
+
+async function loadExperiences() {
+  const { data } = await api.get();
+  experiences = data;
+  render();
+}
+
+function render() {
+  document.getElementById('countBadge').textContent = experiences.length;
+  const list = document.getElementById('expList');
+  if (!experiences.length) {
+    list.innerHTML = `<div class="empty"><div class="empty-icon">🎾</div><h3>No experiences yet</h3><p>Create your first experience to display it on the website.</p></div>`;
+    return;
+  }
+  list.innerHTML = experiences.map(ev => `
+    <div class="exp-row" id="row-${ev.id}">
+      <div class="exp-thumb">
+        ${ev.card_img ? `<img src="${ev.card_img}" alt="${ev.title}" loading="lazy">` : ''}
+        ${ev.is_hero ? '<div class="hero-star">★ Hero</div>' : ''}
+      </div>
+      <div class="exp-info">
+        <div class="exp-title">${ev.title}</div>
+        <div class="exp-meta">
+          <span class="meta-item"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${ev.lugar}</span>
+          <span class="meta-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${ev.hora} · ${ev.duracion}</span>
+        </div>
+      </div>
+      <span class="badge-pax">${ev.pax} pax.</span>
+      <label class="toggle" title="${ev.active ? 'Active' : 'Inactive'}">
+        <input type="checkbox" ${ev.active ? 'checked' : ''} onchange="toggleActive(${ev.id}, this.checked)">
+        <span class="toggle-slider"></span>
+      </label>
+      <div class="exp-actions">
+        <button class="action-btn star ${ev.is_hero ? 'active-star' : ''}" onclick="setHero(${ev.id})" title="Set as featured">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </button>
+        <button class="action-btn" onclick="openDrawer(${ev.id})" title="Edit">
+          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="action-btn danger" onclick="openConfirm(${ev.id})" title="Delete">
+          <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        </button>
+      </div>
+    </div>`).join('');
+}
+
+async function toggleActive(id, val) {
+  await api.toggle(id);
+  const ev = experiences.find(e => e.id === id);
+  if (ev) ev.active = val;
+  render();
+  showToast(val ? 'Experience activated' : 'Experience deactivated');
+}
+
+async function setHero(id) {
+  await api.hero(id);
+  experiences.forEach(e => e.is_hero = e.id === id);
+  render();
+  showToast('Featured experience updated');
+}
+
+function openDrawer(id = null) {
+  editingId = id;
+  const ev = id ? experiences.find(e => e.id === id) : null;
+  document.getElementById('drawerTitle').textContent = id ? 'Edit experience' : 'New experience';
+  document.getElementById('fId').value       = id || '';
+  document.getElementById('fTitle').value    = ev?.title || '';
+  document.getElementById('fDesc').value     = ev?.description || '';
+  document.getElementById('fLugar').value    = ev?.lugar || '';
+  document.getElementById('fHora').value     = ev?.hora || '';
+  document.getElementById('fDuracion').value = ev?.duracion || '';
+  document.getElementById('fPax').value      = ev?.pax ?? 20;
+  document.getElementById('fHero').checked   = ev?.is_hero || false;
+  document.getElementById('fActive').checked = ev?.active ?? true;
+  document.getElementById('fHeroImg').value  = ev?.hero_img || '';
+  document.getElementById('fCardImg').value  = ev?.card_img || '';
+  ['fHeroImg:prevHero','fCardImg:prevCard'].forEach(p => {
+    const [f,d] = p.split(':'); previewImg(f,d);
+  });
+  document.getElementById('drawerOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('fTitle').focus(), 280);
+}
+
+function closeDrawer() {
+  document.getElementById('drawerOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  editingId = null;
+}
+
+async function saveExp() {
+  const title = document.getElementById('fTitle').value.trim();
+  if (!title) { document.getElementById('fTitle').focus(); return; }
+  const body = {
+    title, description: document.getElementById('fDesc').value.trim(),
+    lugar: document.getElementById('fLugar').value.trim(), hora: document.getElementById('fHora').value.trim(),
+    duracion: document.getElementById('fDuracion').value.trim(), pax: parseInt(document.getElementById('fPax').value) || 20,
+    is_hero: document.getElementById('fHero').checked, active: document.getElementById('fActive').checked,
+    hero_img: document.getElementById('fHeroImg').value.trim(), card_img: document.getElementById('fCardImg').value.trim(),
+  };
+  const btn = document.getElementById('btnSave');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  try {
+    const res = editingId ? await api.update(editingId, body) : await api.create(body);
+    if (!res.success) throw new Error(res.error);
+    await loadExperiences(); closeDrawer();
+    showToast(editingId ? 'Experience updated' : 'Experience created');
+  } catch(e) { showToast('Error: ' + e.message); }
+  finally { btn.disabled = false; btn.textContent = 'Save experience'; }
+}
+
+function openConfirm(id) {
+  deleteId = id;
+  const ev = experiences.find(e => e.id === id);
+  document.getElementById('confirmDesc').textContent = `Are you sure you want to delete "${ev?.title}"? This action cannot be undone.`;
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+function closeConfirm() { document.getElementById('confirmOverlay').classList.remove('open'); deleteId = null; }
+async function confirmDelete() {
+  if (deleteId === null) return;
+  await api.delete(deleteId); await loadExperiences(); closeConfirm();
+  showToast('Experience deleted');
+}
+
+function previewImg(inputId, previewId) {
+  const url = document.getElementById(inputId).value.trim();
+  const el = document.getElementById(previewId);
+  el.style.backgroundImage = url ? `url('${url}')` : 'none';
+  el.style.display = url ? 'block' : 'none';
+}
+
+function triggerUpload(inputId, previewId) {
+  // find the hidden file input that corresponds to this field
+  const map = { fHeroImg:'uHeroImg', fCardImg:'uCardImg', fImg1:'uImg1', fImg2:'uImg2', fImg3:'uImg3' };
+  document.getElementById(map[inputId]).click();
+}
+
+async function uploadFile(fileInput, inputId, previewId) {
+  const file = fileInput.files[0];
+  if (!file) return;
+  const formData = new FormData();
+  formData.append('image', file);
+  try {
+    const btn = fileInput.previousElementSibling;
+    btn.textContent = '⏳';
+    btn.disabled = true;
+    const res = await fetch('/api/upload', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.url) {
+      document.getElementById(inputId).value = data.url;
+      previewImg(inputId, previewId);
+      showToast('Image uploaded ✓');
+    } else {
+      showToast('Upload error');
+    }
+  } catch(e) {
+    showToast('Upload error');
+  } finally {
+    const btn = fileInput.previousElementSibling;
+    btn.textContent = '📁';
+    btn.disabled = false;
+    fileInput.value = '';
+  }
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('confirmOverlay').classList.contains('open')) closeConfirm();
+    else if (document.getElementById('drawerOverlay').classList.contains('open')) closeDrawer();
+  }
+});
+document.getElementById('drawerOverlay').addEventListener('click', e => { if (e.target===document.getElementById('drawerOverlay')) closeDrawer(); });
+document.getElementById('confirmOverlay').addEventListener('click', e => { if (e.target===document.getElementById('confirmOverlay')) closeConfirm(); });
+
+loadExperiences();
+</script>
+</body>
+</html>
